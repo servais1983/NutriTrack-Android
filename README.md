@@ -1,25 +1,84 @@
 # NutriTrack Android
 
-Application Android pour calculer les besoins caloriques, scanner les étiquettes nutritionnelles et suivre l'évolution de la condition physique.
+Application Android complète pour calculer les besoins caloriques personnalisés, scanner les étiquettes nutritionnelles et suivre l'évolution de la condition physique.
 
-## Fonctionnalités
+## Fonctionnalités principales
 
-- Calcul des besoins caloriques personnalisés selon âge, sexe, poids, taille et niveau d'activité
-- Définition des objectifs (perte de poids, prise de muscle, maintien, etc.)
-- Scan des étiquettes nutritionnelles via l'appareil photo
-- Suivi de la progression du poids
-- Analyse des macronutriments (protéines, glucides, lipides)
-- Interface utilisateur intuitive
+### Profil personnalisé
+- Configuration détaillée du profil (âge, sexe, poids, taille, niveau d'activité)
+- Calcul automatique des besoins caloriques selon la formule de Mifflin-St Jeor
+- Recommandations personnalisées de macronutriments selon l'objectif choisi
+
+### Suivi nutritionnel
+- Tableau de bord avec statistiques nutritionnelles en temps réel
+- Tracking des calories et macronutriments quotidiens
+- Organisation par type de repas (petit déjeuner, déjeuner, dîner, collation)
+- Historique des aliments consommés
+
+### Scan intelligent
+- Scan de codes-barres pour identification rapide des produits
+- Reconnaissance optique des étiquettes nutritionnelles
+- Extraction automatique des valeurs nutritionnelles
+
+### Suivi de progression
+- Graphique d'évolution du poids
+- Suivi des tendances sur la durée
+- Enregistrement d'historique
+
+## Technologies utilisées
+
+- **Architecture** : MVVM (Model-View-ViewModel) avec LiveData et Repository
+- **Stockage local** : Room Database pour une persistance des données optimisée
+- **Interface utilisateur** : Material Design Components pour une expérience moderne
+- **Capture d'image** : CameraX pour l'intégration de la caméra
+- **Vision par ordinateur** : ML Kit pour la reconnaissance de texte et codes-barres
+- **Visualisation de données** : MPAndroidChart pour les graphiques interactifs
 
 ## Structure du projet
 
-L'application est développée en Java avec Android Studio et utilise:
-- Architecture MVVM
-- Room Database pour la persistance des données
-- Camera API pour la numérisation des étiquettes
-- ML Kit pour la reconnaissance des informations nutritionnelles
-- Material Design Components
+- **database** : Entités, DAOs et classes d'utilitaires pour la persistance des données
+- **repository** : Couche d'accès aux données avec méthodes CRUD
+- **viewmodel** : Logique de présentation et gestion des états
+- **dialog** : Boîtes de dialogue pour l'interaction utilisateur
+- **adapter** : Adaptateurs pour les listes RecyclerView
+- **barcode** / **nutrition** : Modules pour la reconnaissance optique
 
-## En cours de développement
+## Captures d'écran
 
-Ce projet est en cours de développement actif.
+[À venir]
+
+## Installation
+
+1. Clonez le dépôt :
+```
+git clone https://github.com/servais1983/NutriTrack-Android.git
+```
+
+2. Ouvrez le projet dans Android Studio
+
+3. Synchronisez avec Gradle
+
+4. Exécutez sur un appareil ou émulateur (API 21 minimum recommandé)
+
+## Prérequis
+
+- Android Studio 4.2 ou supérieur
+- SDK Android 30 ou supérieur
+- Gradle 7.0 ou supérieur
+
+## Améliorations futures
+
+- Synchronisation avec des bases de données nutritionnelles en ligne
+- Reconnaissance d'aliments par photo
+- Suggestions personnalisées de repas
+- Intégration avec Google Fit et autres wearables
+- Mode hors-ligne amélioré
+- Support multilingue complet
+
+## Contribution
+
+Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou soumettre une Pull Request.
+
+## Licence
+
+Ce projet est sous licence MIT.
