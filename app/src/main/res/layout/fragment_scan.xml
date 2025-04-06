@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tv_scan_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scanner des aliments"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_scan_instructions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Utilisez l'appareil photo pour scanner des codes-barres ou des étiquettes nutritionnelles."
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_scan_title" />
+
+    <ImageView
+        android:id="@+id/iv_scan_illustration"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="Illustration de scan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_scan_instructions"
+        android:src="@drawable/ic_scan"
+        android:scaleType="fitCenter" />
+
+    <Button
+        android:id="@+id/btn_scan_barcode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/scan_barcode"
+        android:drawableStart="@drawable/ic_barcode"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_scan_illustration" />
+
+    <Button
+        android:id="@+id/btn_scan_nutrition"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/scan_nutrition_label"
+        android:drawableStart="@drawable/ic_nutrition"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_scan_barcode" />
+
+    <TextView
+        android:id="@+id/tv_scan_tip"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Astuces : Assurez-vous d'avoir un bon éclairage et de tenir l'appareil photo à environ 15-20 cm de l'étiquette."
+        android:textAlignment="center"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_scan_nutrition" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
