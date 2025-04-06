@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="meal_types">
+        <item>@string/breakfast</item>
+        <item>@string/lunch</item>
+        <item>@string/dinner</item>
+        <item>@string/snack</item>
+    </string-array>
+    
+    <string-array name="activity_levels">
+        <item>@string/sedentary</item>
+        <item>@string/lightly_active</item>
+        <item>@string/moderately_active</item>
+        <item>@string/very_active</item>
+        <item>@string/extra_active</item>
+    </string-array>
+    
+    <string-array name="goals">
+        <item>@string/lose_weight</item>
+        <item>@string/maintain_weight</item>
+        <item>@string/gain_muscle</item>
+        <item>@string/gain_weight</item>
+    </string-array>
+</resources>
