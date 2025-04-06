@@ -1,0 +1,65 @@
+<resources>
+    <string name="app_name">NutriTrack</string>
+    
+    <!-- Navigation -->
+    <string name="nav_dashboard">Tableau de bord</string>
+    <string name="nav_food">Aliments</string>
+    <string name="nav_scan">Scanner</string>
+    <string name="nav_progress">Progrès</string>
+    <string name="nav_profile">Profil</string>
+    
+    <!-- Fragments -->
+    <string name="calories_goal">Objectif calories</string>
+    <string name="calories_consumed">Consommées</string>
+    <string name="calories_remaining">Restantes</string>
+    <string name="protein">Protéines</string>
+    <string name="carbs">Glucides</string>
+    <string name="fat">Lipides</string>
+    
+    <!-- Scanner -->
+    <string name="scan_barcode">Scanner code-barres</string>
+    <string name="scan_nutrition_label">Scanner étiquette</string>
+    <string name="camera_permission_required">Permission caméra requise</string>
+    
+    <!-- Profil -->
+    <string name="age">Âge</string>
+    <string name="height">Taille (cm)</string>
+    <string name="weight">Poids (kg)</string>
+    <string name="gender">Genre</string>
+    <string name="male">Homme</string>
+    <string name="female">Femme</string>
+    <string name="activity_level">Niveau d\'activité</string>
+    <string name="goal">Objectif</string>
+    <string name="save">Enregistrer</string>
+    
+    <!-- Activity Levels -->
+    <string name="sedentary">Sédentaire</string>
+    <string name="lightly_active">Légèrement actif</string>
+    <string name="moderately_active">Modérément actif</string>
+    <string name="very_active">Très actif</string>
+    <string name="extra_active">Extrêmement actif</string>
+    
+    <!-- Goals -->
+    <string name="lose_weight">Perdre du poids</string>
+    <string name="maintain_weight">Maintenir le poids</string>
+    <string name="gain_muscle">Prendre du muscle</string>
+    <string name="gain_weight">Prendre du poids</string>
+    
+    <!-- Progress -->
+    <string name="current_weight">Poids actuel</string>
+    <string name="new_weight">Nouveau poids</string>
+    <string name="update_weight">Mettre à jour</string>
+    <string name="weight_history">Historique du poids</string>
+    
+    <!-- Food -->
+    <string name="add_food">Ajouter un aliment</string>
+    <string name="food_name">Nom de l\'aliment</string>
+    <string name="quantity">Quantité (g)</string>
+    <string name="meal_type">Type de repas</string>
+    <string name="breakfast">Petit déjeuner</string>
+    <string name="lunch">Déjeuner</string>
+    <string name="dinner">Dîner</string>
+    <string name="snack">Collation</string>
+    <string name="add">Ajouter</string>
+    <string name="cancel">Annuler</string>
+</resources>
