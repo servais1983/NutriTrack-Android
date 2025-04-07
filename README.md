@@ -43,28 +43,6 @@ Application Android complète pour calculer les besoins caloriques personnalisé
 - **adapter** : Adaptateurs pour les listes RecyclerView
 - **barcode** / **nutrition** : Modules pour la reconnaissance optique
 
-## Captures d'écran
-
-[À venir]
-
-## Installation
-
-1. Clonez le dépôt :
-```
-git clone https://github.com/servais1983/NutriTrack-Android.git
-```
-
-2. Ouvrez le projet dans Android Studio
-
-3. Synchronisez avec Gradle
-
-4. Exécutez sur un appareil ou émulateur (API 21 minimum recommandé)
-
-## Prérequis
-
-- Android Studio 4.2 ou supérieur
-- SDK Android 30 ou supérieur
-- Gradle 7.0 ou supérieur
 
 ## Améliorations futures
 
