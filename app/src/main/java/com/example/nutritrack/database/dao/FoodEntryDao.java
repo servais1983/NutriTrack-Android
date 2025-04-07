@@ -24,30 +24,30 @@ public interface FoodEntryDao {
     @Delete
     void delete(FoodEntryEntity foodEntry);
 
-    @Query("DELETE FROM food_entries")
-    void deleteAll();
-
     @Query("SELECT * FROM food_entries WHERE id = :id")
-    LiveData<FoodEntryEntity> getFoodEntryById(long id);
+    LiveData<FoodEntryEntity> getFoodEntryById(int id);
 
-    @Query("SELECT * FROM food_entries ORDER BY date_time DESC")
-    LiveData<List<FoodEntryEntity>> getAllFoodEntries();
+    @Query("SELECT * FROM food_entries WHERE user_id = :userId ORDER BY date DESC")
+    LiveData<List<FoodEntryEntity>> getFoodEntriesByUserId(int userId);
 
-    @Query("SELECT * FROM food_entries WHERE date_time >= :startDate AND date_time <= :endDate ORDER BY date_time DESC")
-    LiveData<List<FoodEntryEntity>> getFoodEntriesByDateRange(Date startDate, Date endDate);
+    @Query("SELECT * FROM food_entries WHERE user_id = :userId AND date >= :startDate AND date <= :endDate ORDER BY date ASC")
+    LiveData<List<FoodEntryEntity>> getFoodEntriesByUserIdAndDateRange(int userId, Date startDate, Date endDate);
 
-    @Query("SELECT * FROM food_entries WHERE meal_type = :mealType ORDER BY date_time DESC")
-    LiveData<List<FoodEntryEntity>> getFoodEntriesByMealType(String mealType);
+    @Query("SELECT * FROM food_entries WHERE user_id = :userId AND date = :date")
+    LiveData<List<FoodEntryEntity>> getFoodEntriesByUserIdAndDate(int userId, Date date);
 
-    @Query("SELECT SUM(calories) FROM food_entries WHERE date_time >= :startDate AND date_time <= :endDate")
-    LiveData<Integer> getTotalCaloriesByDateRange(Date startDate, Date endDate);
+    @Query("SELECT * FROM food_entries WHERE user_id = :userId AND meal_type = :mealType AND date = :date")
+    LiveData<List<FoodEntryEntity>> getFoodEntriesByUserIdAndMealTypeAndDate(int userId, String mealType, Date date);
 
-    @Query("SELECT SUM(protein) FROM food_entries WHERE date_time >= :startDate AND date_time <= :endDate")
-    LiveData<Float> getTotalProteinByDateRange(Date startDate, Date endDate);
+    @Query("SELECT SUM(calories) FROM food_entries WHERE user_id = :userId AND date = :date")
+    LiveData<Integer> getTotalCaloriesByUserIdAndDate(int userId, Date date);
 
-    @Query("SELECT SUM(carbs) FROM food_entries WHERE date_time >= :startDate AND date_time <= :endDate")
-    LiveData<Float> getTotalCarbsByDateRange(Date startDate, Date endDate);
+    @Query("SELECT SUM(protein) FROM food_entries WHERE user_id = :userId AND date = :date")
+    LiveData<Float> getTotalProteinByUserIdAndDate(int userId, Date date);
 
-    @Query("SELECT SUM(fat) FROM food_entries WHERE date_time >= :startDate AND date_time <= :endDate")
-    LiveData<Float> getTotalFatByDateRange(Date startDate, Date endDate);
+    @Query("SELECT SUM(carbs) FROM food_entries WHERE user_id = :userId AND date = :date")
+    LiveData<Float> getTotalCarbsByUserIdAndDate(int userId, Date date);
+
+    @Query("SELECT SUM(fat) FROM food_entries WHERE user_id = :userId AND date = :date")
+    LiveData<Float> getTotalFatByUserIdAndDate(int userId, Date date);
 }
