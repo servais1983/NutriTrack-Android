@@ -1,5 +1,8 @@
 package com.example.nutritrack.nutrition;
 
+/**
+ * Classe représentant un aliment avec ses informations nutritionnelles
+ */
 public class FoodItem {
     private String name;
     private int calories;

@@ -12,12 +12,19 @@ import com.example.nutritrack.R;
 import com.example.nutritrack.nutrition.FoodItem;
 
 import java.util.List;
+import java.util.Locale;
 
+/**
+ * Adaptateur pour afficher une liste d'aliments dans un RecyclerView
+ */
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder> {
 
     private List<FoodItem> foodItems;
     private OnFoodItemClickListener listener;
 
+    /**
+     * Interface pour gérer les clics sur les éléments de la liste
+     */
     public interface OnFoodItemClickListener {
         void onFoodItemClick(FoodItem foodItem);
     }
@@ -37,8 +44,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
-        FoodItem food = foodItems.get(position);
-        holder.bind(food, listener);
+        FoodItem foodItem = foodItems.get(position);
+        holder.bind(foodItem, listener);
     }
 
     @Override
@@ -46,29 +53,33 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
         return foodItems.size();
     }
 
+    /**
+     * ViewHolder pour les éléments de la liste d'aliments
+     */
     static class FoodViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvFoodName;
+        private TextView tvName;
         private TextView tvCalories;
         private TextView tvNutrients;
 
         public FoodViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvFoodName = itemView.findViewById(R.id.tv_food_name);
-            tvCalories = itemView.findViewById(R.id.tv_calories);
-            tvNutrients = itemView.findViewById(R.id.tv_nutrients);
+            tvName = itemView.findViewById(R.id.tv_food_name);
+            tvCalories = itemView.findViewById(R.id.tv_food_calories);
+            tvNutrients = itemView.findViewById(R.id.tv_food_nutrients);
         }
 
-        public void bind(final FoodItem food, final OnFoodItemClickListener listener) {
-            tvFoodName.setText(food.getName());
-            tvCalories.setText(String.valueOf(food.getCalories()) + " kcal");
-            tvNutrients.setText(String.format("P: %.1fg | C: %.1fg | L: %.1fg", 
-                    food.getProtein(), food.getCarbs(), food.getFat()));
+        public void bind(final FoodItem foodItem, final OnFoodItemClickListener listener) {
+            tvName.setText(foodItem.getName());
+            tvCalories.setText(String.format(Locale.getDefault(), "%d kcal", foodItem.getCalories()));
+            tvNutrients.setText(String.format(Locale.getDefault(), 
+                    "P: %.1fg | C: %.1fg | L: %.1fg", 
+                    foodItem.getProtein(), foodItem.getCarbs(), foodItem.getFat()));
 
-            // Gérer le clic sur l'aliment
+            // Définir le gestionnaire de clic
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onFoodItemClick(food);
+                    listener.onFoodItemClick(foodItem);
                 }
             });
         }
