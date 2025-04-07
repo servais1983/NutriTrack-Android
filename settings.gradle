@@ -1,2 +1,1 @@
-include ':app'
-rootProject.name = "NutriTrack"
+# Ce fichier a été supprimé car il n'est pas nécessaire pour une application web.
