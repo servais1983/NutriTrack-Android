@@ -4,82 +4,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:fillViewport="true"
+    tools:context=".ProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/tv_profile_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Vos informations personnelles"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:text="@string/profile"
+            android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_age_label"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_name"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/age"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_profile_title" />
+            android:layout_marginTop="16dp"
+            android:hint="@string/full_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_profile_title">
 
-        <EditText
-            android:id="@+id/et_age"
-            android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_age"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:layout_marginTop="8dp"
             android:hint="@string/age"
-            android:inputType="number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_age_label" />
+            app:layout_constraintTop_toBottomOf="@+id/til_name">
 
-        <TextView
-            android:id="@+id/tv_height_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/height"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_age" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/et_height"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_height"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/height"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:hint="@string/height_cm"
+            app:layout_constraintEnd_toStartOf="@+id/til_weight"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_height_label" />
+            app:layout_constraintTop_toBottomOf="@+id/til_age">
 
-        <TextView
-            android:id="@+id/tv_weight_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/weight"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_height" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_height"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/et_weight"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_weight"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/weight"
-            android:inputType="numberDecimal"
+            android:layout_marginStart="4dp"
+            android:hint="@string/weight_kg"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_weight_label" />
+            app:layout_constraintStart_toEndOf="@+id/til_height"
+            app:layout_constraintTop_toTopOf="@+id/til_height">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_save_weight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/add_weight"
+            app:layout_constraintEnd_toEndOf="@+id/til_weight"
+            app:layout_constraintStart_toStartOf="@+id/til_weight"
+            app:layout_constraintTop_toBottomOf="@+id/til_weight" />
 
         <TextView
             android:id="@+id/tv_gender_label"
@@ -88,29 +107,27 @@
             android:layout_marginTop="16dp"
             android:text="@string/gender"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_weight" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_save_weight" />
 
         <RadioGroup
             android:id="@+id/rg_gender"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_gender_label">
 
             <RadioButton
                 android:id="@+id/rb_male"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginEnd="16dp"
                 android:text="@string/male" />
 
             <RadioButton
                 android:id="@+id/rb_female"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="@string/female" />
         </RadioGroup>
 
@@ -125,11 +142,10 @@
 
         <Spinner
             android:id="@+id/sp_activity_level"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:entries="@array/activity_levels"
             app:layout_constraintTop_toBottomOf="@+id/tv_activity_level_label" />
 
         <TextView
@@ -143,23 +159,19 @@
 
         <Spinner
             android:id="@+id/sp_goal"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:entries="@array/goals"
             app:layout_constraintTop_toBottomOf="@+id/tv_goal_label" />
 
         <Button
             android:id="@+id/btn_save"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:layout_marginBottom="24dp"
+            android:padding="12dp"
             android:text="@string/save"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sp_goal" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
