@@ -41,6 +41,7 @@
     <string name="add_food">Ajouter un aliment</string>
     
     <!-- Aliments -->
+    <string name="search">Rechercher</string>
     <string name="search_food">Rechercher un aliment</string>
     <string name="add_to_diary">Ajouter au journal</string>
     <string name="food_name">Nom de l'aliment</string>
