@@ -1,0 +1,38 @@
+/* Styles pour les notifications */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    transition: all 0.3s ease;
+    transform: translateY(100px);
+    opacity: 0;
+    max-width: 300px;
+}
+
+.notification.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.notification.error {
+    background-color: #e74c3c;
+}
+
+.notification.warning {
+    background-color: #f39c12;
+}
+
+/* Styles pour les changements de poids */
+.positive-change {
+    color: #e74c3c; /* Rouge pour gain de poids */
+}
+
+.negative-change {
+    color: #27ae60; /* Vert pour perte de poids */
+}
