@@ -37,8 +37,8 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
-        FoodItem foodItem = foodItems.get(position);
-        holder.bind(foodItem, listener);
+        FoodItem food = foodItems.get(position);
+        holder.bind(food, listener);
     }
 
     @Override
@@ -47,9 +47,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
     }
 
     static class FoodViewHolder extends RecyclerView.ViewHolder {
-        TextView tvFoodName;
-        TextView tvCalories;
-        TextView tvNutrients;
+        private TextView tvFoodName;
+        private TextView tvCalories;
+        private TextView tvNutrients;
 
         public FoodViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,16 +58,17 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
             tvNutrients = itemView.findViewById(R.id.tv_nutrients);
         }
 
-        public void bind(final FoodItem foodItem, final OnFoodItemClickListener listener) {
-            tvFoodName.setText(foodItem.getName());
-            tvCalories.setText(String.valueOf(foodItem.getCalories()) + " kcal");
+        public void bind(final FoodItem food, final OnFoodItemClickListener listener) {
+            tvFoodName.setText(food.getName());
+            tvCalories.setText(String.valueOf(food.getCalories()) + " kcal");
             tvNutrients.setText(String.format("P: %.1fg | C: %.1fg | L: %.1fg", 
-                    foodItem.getProtein(), foodItem.getCarbs(), foodItem.getFat()));
+                    food.getProtein(), food.getCarbs(), food.getFat()));
 
+            // Gérer le clic sur l'aliment
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onFoodItemClick(foodItem);
+                    listener.onFoodItemClick(food);
                 }
             });
         }
