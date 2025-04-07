@@ -1,84 +1,27 @@
-# NutriTrack Android
+# NutriTrack GitHub Page
 
-Application Android complète pour calculer les besoins caloriques personnalisés, scanner les étiquettes nutritionnelles et suivre l'évolution de la condition physique.
+Ce dépôt contient les fichiers de la GitHub Page pour l'application NutriTrack-Android.
 
-## Fonctionnalités principales
+## Accès au site
 
-### Profil personnalisé
-- Configuration détaillée du profil (âge, sexe, poids, taille, niveau d'activité)
-- Calcul automatique des besoins caloriques selon la formule de Mifflin-St Jeor
-- Recommandations personnalisées de macronutriments selon l'objectif choisi
+La GitHub Page est accessible à l'adresse suivante : [https://servais1983.github.io/NutriTrack-Android/](https://servais1983.github.io/NutriTrack-Android/)
 
-### Suivi nutritionnel
-- Tableau de bord avec statistiques nutritionnelles en temps réel
-- Tracking des calories et macronutriments quotidiens
-- Organisation par type de repas (petit déjeuner, déjeuner, dîner, collation)
-- Historique des aliments consommés
+## Activation de GitHub Pages
 
-### Scan intelligent
-- Scan de codes-barres pour identification rapide des produits
-- Reconnaissance optique des étiquettes nutritionnelles
-- Extraction automatique des valeurs nutritionnelles
+Pour activer GitHub Pages :
 
-### Suivi de progression
-- Graphique d'évolution du poids
-- Suivi des tendances sur la durée
-- Enregistrement d'historique
+1. Aller sur la page du dépôt GitHub : https://github.com/servais1983/NutriTrack-Android
+2. Cliquer sur l'onglet "Settings"
+3. Dans le menu de gauche, faire défiler jusqu'à la section "Pages"
+4. Sous "Source", sélectionner "Deploy from a branch"
+5. Sous "Branch", sélectionner "gh-pages" et "/" dans le menu déroulant
+6. Cliquer sur "Save"
 
-## Technologies utilisées
+## Structure du site
 
-- **Architecture** : MVVM (Model-View-ViewModel) avec LiveData et Repository
-- **Stockage local** : Room Database pour une persistance des données optimisée
-- **Interface utilisateur** : Material Design Components pour une expérience moderne
-- **Capture d'image** : CameraX pour l'intégration de la caméra
-- **Vision par ordinateur** : ML Kit pour la reconnaissance de texte et codes-barres
-- **Visualisation de données** : MPAndroidChart pour les graphiques interactifs
+Le site est construit avec HTML, CSS et JavaScript :
 
-## Structure du projet
-
-- **database** : Entités, DAOs et classes d'utilitaires pour la persistance des données
-- **repository** : Couche d'accès aux données avec méthodes CRUD
-- **viewmodel** : Logique de présentation et gestion des états
-- **dialog** : Boîtes de dialogue pour l'interaction utilisateur
-- **adapter** : Adaptateurs pour les listes RecyclerView
-- **barcode** / **nutrition** : Modules pour la reconnaissance optique
-
-## Captures d'écran
-
-[À venir]
-
-## Installation
-
-1. Clonez le dépôt :
-```
-git clone https://github.com/servais1983/NutriTrack-Android.git
-```
-
-2. Ouvrez le projet dans Android Studio
-
-3. Synchronisez avec Gradle
-
-4. Exécutez sur un appareil ou émulateur (API 21 minimum recommandé)
-
-## Prérequis
-
-- Android Studio 4.2 ou supérieur
-- SDK Android 30 ou supérieur
-- Gradle 7.0 ou supérieur
-
-## Améliorations futures
-
-- Synchronisation avec des bases de données nutritionnelles en ligne
-- Reconnaissance d'aliments par photo
-- Suggestions personnalisées de repas
-- Intégration avec Google Fit et autres wearables
-- Mode hors-ligne amélioré
-- Support multilingue complet
-
-## Contribution
-
-Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou soumettre une Pull Request.
-
-## Licence
-
-Ce projet est sous licence MIT.
+- `index.html` : Page principale du site
+- `styles.css` : Feuille de style CSS
+- `script.js` : Scripts JavaScript pour les animations et fonctions interactives
+- `placeholder-app.png` et `placeholder-tech.png` : Images placeholder
