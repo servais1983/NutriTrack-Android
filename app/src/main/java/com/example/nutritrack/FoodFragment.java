@@ -1,193 +1,229 @@
 package com.example.nutritrack;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.nutritrack.adapter.FoodEntryAdapter;
-import com.example.nutritrack.barcode.BarcodeScannerActivity;
+import com.example.nutritrack.adapter.FoodAdapter;
+import com.example.nutritrack.database.AppDatabase;
 import com.example.nutritrack.database.entity.FoodEntryEntity;
-import com.example.nutritrack.dialog.AddFoodDialogFragment;
-import com.example.nutritrack.nutrition.NutritionScannerActivity;
-import com.example.nutritrack.viewmodel.FoodViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
+import com.example.nutritrack.dialog.AddFoodDialog;
+import com.example.nutritrack.nutrition.FoodItem;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class FoodFragment extends Fragment implements AddFoodDialogFragment.AddFoodDialogListener {
+public class FoodFragment extends Fragment implements FoodAdapter.OnFoodItemClickListener, AddFoodDialog.AddFoodDialogListener {
 
-    private static final int REQUEST_BARCODE_SCAN = 100;
-    private static final int REQUEST_NUTRITION_SCAN = 101;
+    private EditText etSearch;
+    private Button btnSearch;
+    private RecyclerView rvFoodList;
+    private FoodAdapter foodAdapter;
+    private List<FoodItem> foodItems;
+    private List<FoodItem> filteredFoodItems;
 
-    private FoodViewModel foodViewModel;
-    private RecyclerView recyclerView;
-    private FoodEntryAdapter adapter;
-    private FloatingActionButton fabAddFood;
-    private TextView tvEmptyFoodList;
-    private TabLayout tabLayout;
-    
-    private String currentMealType = "Petit déjeuner";
+    private int userId;
+    private ExecutorService executor;
+    private Handler handler;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Récupérer l'ID de l'utilisateur depuis les arguments
+        Bundle args = getArguments();
+        if (args != null) {
+            userId = args.getInt("userId", -1);
+        } else {
+            userId = UserSession.getInstance(getContext()).getUserId();
+        }
+
+        // Initialiser l'exécuteur pour les opérations de base de données en arrière-plan
+        executor = Executors.newSingleThreadExecutor();
+        handler = new Handler(Looper.getMainLooper());
+
+        // Initialiser les listes d'aliments
+        foodItems = initializeFoodDatabase();
+        filteredFoodItems = new ArrayList<>(foodItems);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_food, container, false);
-        
-        recyclerView = view.findViewById(R.id.recycler_view_food);
-        fabAddFood = view.findViewById(R.id.fab_add_food);
-        tvEmptyFoodList = view.findViewById(R.id.tv_empty_food_list);
-        tabLayout = view.findViewById(R.id.tab_layout_meals);
-        
-        // Configurer le RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new FoodEntryAdapter();
-        recyclerView.setAdapter(adapter);
-        
-        // Configurer le ViewModel
-        foodViewModel = new ViewModelProvider(this).get(FoodViewModel.class);
-        
-        // Observer les changements dans la liste d'aliments pour le repas actuel
-        updateFoodListForMealType(currentMealType);
-        
-        // Gérer les clics sur les onglets
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                String mealType = tab.getText().toString();
-                currentMealType = mealType;
-                updateFoodListForMealType(mealType);
-            }
 
+        // Initialiser les vues
+        etSearch = view.findViewById(R.id.et_search_food);
+        btnSearch = view.findViewById(R.id.btn_search);
+        rvFoodList = view.findViewById(R.id.rv_food_list);
+
+        // Configurer le RecyclerView
+        foodAdapter = new FoodAdapter(filteredFoodItems, this);
+        rvFoodList.setAdapter(foodAdapter);
+        rvFoodList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Configurer la recherche
+        etSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // Non utilisé
             }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Filtrer la liste pendant la frappe
+                filterFoodItems(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
                 // Non utilisé
             }
         });
-        
-        // Action du bouton d'ajout
-        fabAddFood.setOnClickListener(new View.OnClickListener() {
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddFoodOptions();
+                String query = etSearch.getText().toString().trim();
+                filterFoodItems(query);
             }
         });
-        
-        // Gérer les clics sur les éléments
-        adapter.setOnItemClickListener(new FoodEntryAdapter.OnItemClickListener() {
+
+        // Ajouter un bouton pour ajouter un nouvel aliment personnalisé
+        Button btnAddCustom = view.findViewById(R.id.btn_add_custom);
+        btnAddCustom.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(FoodEntryEntity foodEntry) {
-                // Afficher les détails de l'aliment ou permettre l'édition
-                Toast.makeText(getContext(), "Aliment: " + foodEntry.getName(), Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                showAddFoodDialog();
             }
         });
-        
+
         return view;
     }
-    
-    private void updateFoodListForMealType(String mealType) {
-        foodViewModel.getFoodEntriesByMealType(mealType).observe(getViewLifecycleOwner(), new Observer<List<FoodEntryEntity>>() {
-            @Override
-            public void onChanged(List<FoodEntryEntity> foodEntries) {
-                adapter.setFoodEntries(foodEntries);
-                
-                // Afficher un message si la liste est vide
-                if (foodEntries.isEmpty()) {
-                    tvEmptyFoodList.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                } else {
-                    tvEmptyFoodList.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-    }
-    
-    private void showAddFoodOptions() {
-        // Vous pourriez afficher ici un menu contextuel avec les options d'ajout
-        // Pour simplifier, nous affichons directement la boîte de dialogue d'ajout
-        AddFoodDialogFragment dialogFragment = AddFoodDialogFragment.newInstance();
-        dialogFragment.show(getChildFragmentManager(), "AddFoodDialog");
-        
-        // Alternative: lancer directement les activités de scan
-        // startBarcodeScanner();
-        // startNutritionScanner();
-    }
-    
-    private void startBarcodeScanner() {
-        Intent intent = new Intent(getActivity(), BarcodeScannerActivity.class);
-        startActivityForResult(intent, REQUEST_BARCODE_SCAN);
-    }
-    
-    private void startNutritionScanner() {
-        Intent intent = new Intent(getActivity(), NutritionScannerActivity.class);
-        startActivityForResult(intent, REQUEST_NUTRITION_SCAN);
+
+    private List<FoodItem> initializeFoodDatabase() {
+        // Cette méthode devrait normalement charger les aliments depuis une API ou une base de données
+        // Ici, nous créons une liste d'exemples d'aliments
+        List<FoodItem> items = new ArrayList<>();
+
+        // Ajouter quelques aliments communs
+        items.add(new FoodItem("Poulet grillé (100g)", 165, 31, 0, 3.6f));
+        items.add(new FoodItem("Riz blanc cuit (100g)", 130, 2.7f, 28, 0.3f));
+        items.add(new FoodItem("Brocoli cuit (100g)", 55, 3.7f, 11, 0.3f));
+        items.add(new FoodItem("Saumon (100g)", 208, 20, 0, 13));
+        items.add(new FoodItem("Pain complet (tranche)", 81, 4, 15, 1.1f));
+        items.add(new FoodItem("Œuf entier (grand)", 72, 6.3f, 0.4f, 5));
+        items.add(new FoodItem("Lait demi-écrémé (250ml)", 115, 8, 11, 4));
+        items.add(new FoodItem("Avocat (100g)", 160, 2, 9, 14.7f));
+        items.add(new FoodItem("Pomme (moyenne)", 95, 0.5f, 25, 0.3f));
+        items.add(new FoodItem("Yaourt nature (150g)", 86, 5, 5, 3.5f));
+        items.add(new FoodItem("Pâtes (100g cuites)", 131, 5, 25, 1.1f));
+        items.add(new FoodItem("Thon en conserve (100g)", 116, 25, 0, 1));
+        items.add(new FoodItem("Banane (moyenne)", 105, 1.3f, 27, 0.4f));
+        items.add(new FoodItem("Amandes (30g)", 170, 6, 6, 15));
+        items.add(new FoodItem("Fromage cheddar (30g)", 114, 7, 0.4f, 9));
+
+        return items;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private void filterFoodItems(String query) {
+        filteredFoodItems.clear();
         
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_BARCODE_SCAN && data != null) {
-                String barcode = data.getStringExtra(BarcodeScannerActivity.EXTRA_BARCODE_VALUE);
-                if (barcode != null) {
-                    // Dans une application réelle, vous rechercheriez le code-barres dans une base de données
-                    // ou une API pour obtenir les informations nutritionnelles
-                    Toast.makeText(getContext(), "Code-barres détecté: " + barcode, Toast.LENGTH_LONG).show();
-                    
-                    // Pour l'exemple, ouvrir directement la boîte de dialogue d'ajout
-                    AddFoodDialogFragment dialogFragment = AddFoodDialogFragment.newInstance();
-                    dialogFragment.show(getChildFragmentManager(), "AddFoodDialog");
-                }
-            } else if (requestCode == REQUEST_NUTRITION_SCAN && data != null) {
-                HashMap<String, Float> nutritionInfo = 
-                        (HashMap<String, Float>) data.getSerializableExtra(NutritionScannerActivity.EXTRA_NUTRITION_INFO);
-                
-                if (nutritionInfo != null && !nutritionInfo.isEmpty()) {
-                    // Remplir le formulaire d'ajout d'aliment avec les informations détectées
-                    String foodName = "Aliment scanné";
-                    int calories = nutritionInfo.containsKey("calories") ? Math.round(nutritionInfo.get("calories")) : 0;
-                    float protein = nutritionInfo.getOrDefault("protein", 0f);
-                    float carbs = nutritionInfo.getOrDefault("carbs", 0f);
-                    float fat = nutritionInfo.getOrDefault("fat", 0f);
-                    
-                    AddFoodDialogFragment dialogFragment = 
-                            AddFoodDialogFragment.newInstance(foodName, calories, protein, carbs, fat);
-                    dialogFragment.show(getChildFragmentManager(), "AddFoodDialog");
+        if (query.isEmpty()) {
+            // Si la requête est vide, afficher tous les aliments
+            filteredFoodItems.addAll(foodItems);
+        } else {
+            // Sinon, filtrer en fonction de la recherche
+            query = query.toLowerCase().trim();
+            for (FoodItem item : foodItems) {
+                if (item.getName().toLowerCase().contains(query)) {
+                    filteredFoodItems.add(item);
                 }
             }
         }
+        
+        // Mettre à jour l'adaptateur
+        foodAdapter.notifyDataSetChanged();
+    }
+
+    private void showAddFoodDialog() {
+        AddFoodDialog dialog = new AddFoodDialog();
+        dialog.setListener(this);
+        dialog.show(getChildFragmentManager(), "AddFoodDialog");
     }
 
     @Override
-    public void onFoodAdded(FoodEntryEntity foodEntry) {
-        // Définir le type de repas actuel
-        foodEntry.setMealType(currentMealType);
+    public void onFoodItemClick(FoodItem foodItem) {
+        // Lorsqu'un aliment est sélectionné, ajouter à la base de données
+        addFoodEntry(foodItem);
+    }
+
+    @Override
+    public void onFoodAdded(FoodItem foodItem) {
+        // Ajouter le nouvel aliment personnalisé à la liste
+        foodItems.add(foodItem);
+        filteredFoodItems.add(foodItem);
+        foodAdapter.notifyDataSetChanged();
         
-        // Enregistrer l'aliment dans la base de données
-        foodViewModel.insert(foodEntry);
-        
-        Toast.makeText(getContext(), "Aliment ajouté: " + foodEntry.getName(), Toast.LENGTH_SHORT).show();
+        // Ajouter à la base de données
+        addFoodEntry(foodItem);
+    }
+
+    private void addFoodEntry(final FoodItem foodItem) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                // Créer une nouvelle entrée alimentaire
+                FoodEntryEntity foodEntry = new FoodEntryEntity();
+                foodEntry.setUserId(userId);
+                foodEntry.setName(foodItem.getName());
+                foodEntry.setCalories(foodItem.getCalories());
+                foodEntry.setProtein(foodItem.getProtein());
+                foodEntry.setCarbs(foodItem.getCarbs());
+                foodEntry.setFat(foodItem.getFat());
+                foodEntry.setQuantity(100); // Quantité par défaut (g)
+                foodEntry.setDate(new Date()); // Date actuelle
+                foodEntry.setMealType("lunch"); // Type de repas par défaut
+                
+                // Insérer dans la base de données
+                final long id = AppDatabase.getInstance(getContext()).foodEntryDao().insert(foodEntry);
+                
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (id > 0) {
+                            Toast.makeText(getContext(), getString(R.string.success_food_added), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Erreur lors de l'ajout de l'aliment", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (executor != null) {
+            executor.shutdown();
+        }
     }
 }
