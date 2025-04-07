@@ -1,65 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NutriTrack</string>
     
-    <!-- Navigation -->
-    <string name="nav_dashboard">Tableau de bord</string>
-    <string name="nav_food">Aliments</string>
-    <string name="nav_scan">Scanner</string>
-    <string name="nav_progress">Progrès</string>
-    <string name="nav_profile">Profil</string>
+    <!-- Écrans d'authentification -->
+    <string name="login">Se connecter</string>
+    <string name="register">S'inscrire</string>
+    <string name="username">Nom d'utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="confirm_password">Confirmer le mot de passe</string>
+    <string name="full_name">Nom complet</string>
+    <string name="login_to_your_account">Connectez-vous à votre compte</string>
+    <string name="create_an_account">Créer un compte</string>
+    <string name="account_information">Informations de compte</string>
+    <string name="profile_information">Informations de profil</string>
+    <string name="don_t_have_an_account_register">Pas de compte ? Inscrivez-vous</string>
+    <string name="already_have_an_account_login">Déjà un compte ? Connectez-vous</string>
+    <string name="app_logo">Logo de l'application</string>
     
-    <!-- Fragments -->
-    <string name="calories_goal">Objectif calories</string>
-    <string name="calories_consumed">Consommées</string>
-    <string name="calories_remaining">Restantes</string>
-    <string name="protein">Protéines</string>
-    <string name="carbs">Glucides</string>
-    <string name="fat">Lipides</string>
-    
-    <!-- Scanner -->
-    <string name="scan_barcode">Scanner code-barres</string>
-    <string name="scan_nutrition_label">Scanner étiquette</string>
-    <string name="camera_permission_required">Permission caméra requise</string>
-    
-    <!-- Profil -->
+    <!-- Profil utilisateur -->
     <string name="age">Âge</string>
-    <string name="height">Taille (cm)</string>
-    <string name="weight">Poids (kg)</string>
+    <string name="height_cm">Taille (cm)</string>
+    <string name="weight_kg">Poids (kg)</string>
     <string name="gender">Genre</string>
     <string name="male">Homme</string>
     <string name="female">Femme</string>
-    <string name="activity_level">Niveau d\'activité</string>
+    <string name="activity_level">Niveau d'activité</string>
     <string name="goal">Objectif</string>
     <string name="save">Enregistrer</string>
     
-    <!-- Activity Levels -->
-    <string name="sedentary">Sédentaire</string>
-    <string name="lightly_active">Légèrement actif</string>
-    <string name="moderately_active">Modérément actif</string>
-    <string name="very_active">Très actif</string>
-    <string name="extra_active">Extrêmement actif</string>
+    <!-- Navigation et onglets -->
+    <string name="dashboard">Tableau de bord</string>
+    <string name="food">Aliments</string>
+    <string name="scan">Scanner</string>
+    <string name="progress">Progression</string>
+    <string name="profile">Profil</string>
     
-    <!-- Goals -->
-    <string name="lose_weight">Perdre du poids</string>
-    <string name="maintain_weight">Maintenir le poids</string>
-    <string name="gain_muscle">Prendre du muscle</string>
-    <string name="gain_weight">Prendre du poids</string>
-    
-    <!-- Progress -->
-    <string name="current_weight">Poids actuel</string>
-    <string name="new_weight">Nouveau poids</string>
-    <string name="update_weight">Mettre à jour</string>
-    <string name="weight_history">Historique du poids</string>
-    
-    <!-- Food -->
+    <!-- Tableau de bord -->
+    <string name="calories_remaining">Calories restantes</string>
+    <string name="daily_summary">Résumé quotidien</string>
     <string name="add_food">Ajouter un aliment</string>
-    <string name="food_name">Nom de l\'aliment</string>
+    
+    <!-- Aliments -->
+    <string name="search_food">Rechercher un aliment</string>
+    <string name="add_to_diary">Ajouter au journal</string>
+    <string name="food_name">Nom de l'aliment</string>
+    <string name="calories">Calories</string>
+    <string name="protein">Protéines (g)</string>
+    <string name="carbs">Glucides (g)</string>
+    <string name="fat">Lipides (g)</string>
     <string name="quantity">Quantité (g)</string>
     <string name="meal_type">Type de repas</string>
-    <string name="breakfast">Petit déjeuner</string>
+    
+    <!-- Types de repas -->
+    <string name="breakfast">Petit-déjeuner</string>
     <string name="lunch">Déjeuner</string>
     <string name="dinner">Dîner</string>
     <string name="snack">Collation</string>
-    <string name="add">Ajouter</string>
-    <string name="cancel">Annuler</string>
+    
+    <!-- Scanner -->
+    <string name="scan_barcode">Scanner un code-barres</string>
+    <string name="scan_instructions">Placez un code-barres dans le cadre pour le scanner</string>
+    
+    <!-- Progression -->
+    <string name="weight_progress">Progression du poids</string>
+    <string name="nutrition_progress">Progression nutritionnelle</string>
+    <string name="add_weight">Ajouter un poids</string>
+    <string name="current_weight">Poids actuel</string>
+    
+    <!-- Messages d'erreur et succès -->
+    <string name="error_required_field">Ce champ est obligatoire</string>
+    <string name="error_invalid_credentials">Nom d'utilisateur ou mot de passe incorrect</string>
+    <string name="error_passwords_do_not_match">Les mots de passe ne correspondent pas</string>
+    <string name="error_username_taken">Ce nom d'utilisateur est déjà pris</string>
+    <string name="success_profile_updated">Profil mis à jour avec succès</string>
+    <string name="success_food_added">Aliment ajouté avec succès</string>
+    <string name="success_weight_added">Poids ajouté avec succès</string>
+    
+    <!-- Arrays pour les spinners -->
+    <string-array name="activity_levels">
+        <item>Sédentaire</item>
+        <item>Légèrement actif</item>
+        <item>Modérément actif</item>
+        <item>Très actif</item>
+        <item>Extrêmement actif</item>
+    </string-array>
+    
+    <string-array name="goals">
+        <item>Perdre du poids</item>
+        <item>Maintenir le poids</item>
+        <item>Gagner du muscle</item>
+        <item>Prendre du poids</item>
+    </string-array>
+    
+    <string-array name="meal_types">
+        <item>Petit-déjeuner</item>
+        <item>Déjeuner</item>
+        <item>Dîner</item>
+        <item>Collation</item>
+    </string-array>
 </resources>
