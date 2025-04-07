@@ -1,12 +1,13 @@
 package com.example.nutritrack.dialog;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,11 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.nutritrack.R;
 
+import java.util.Locale;
+
+/**
+ * Dialogue pour ajouter un aliment au journal
+ */
 public class AddFoodDialog extends DialogFragment {
 
     private EditText etName;
@@ -22,10 +28,16 @@ public class AddFoodDialog extends DialogFragment {
     private EditText etProtein;
     private EditText etCarbs;
     private EditText etFat;
+    private EditText etQuantity;
+    private Spinner spMealType;
+
     private AddFoodDialogListener listener;
 
+    /**
+     * Interface pour notifier la création d'un aliment
+     */
     public interface AddFoodDialogListener {
-        void onAddFood(String name, int calories, float protein, float carbs, float fat);
+        void onFoodAdded(String name, int calories, float protein, float carbs, float fat, float quantity, String mealType);
     }
 
     public void setListener(AddFoodDialogListener listener) {
@@ -35,7 +47,7 @@ public class AddFoodDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_food, null);
 
@@ -45,61 +57,79 @@ public class AddFoodDialog extends DialogFragment {
         etProtein = view.findViewById(R.id.et_protein);
         etCarbs = view.findViewById(R.id.et_carbs);
         etFat = view.findViewById(R.id.et_fat);
+        etQuantity = view.findViewById(R.id.et_quantity);
+        spMealType = view.findViewById(R.id.sp_meal_type);
 
-        Button btnCancel = view.findViewById(R.id.btn_cancel);
-        Button btnAdd = view.findViewById(R.id.btn_add);
+        // Configurer le spinner avec les types de repas
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
+                R.array.meal_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spMealType.setAdapter(adapter);
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        // Remplir les champs si des données sont fournies (aliment existant)
+        Bundle args = getArguments();
+        if (args != null) {
+            String name = args.getString("name", "");
+            int calories = args.getInt("calories", 0);
+            float protein = args.getFloat("protein", 0);
+            float carbs = args.getFloat("carbs", 0);
+            float fat = args.getFloat("fat", 0);
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addFood();
-            }
-        });
+            etName.setText(name);
+            etCalories.setText(String.format(Locale.getDefault(), "%d", calories));
+            etProtein.setText(String.format(Locale.getDefault(), "%.1f", protein));
+            etCarbs.setText(String.format(Locale.getDefault(), "%.1f", carbs));
+            etFat.setText(String.format(Locale.getDefault(), "%.1f", fat));
+            etQuantity.setText("100"); // Quantité par défaut (100g/ml)
+        }
 
-        builder.setView(view);
-        builder.setTitle("Ajouter un aliment personnalisé");
+        builder.setView(view)
+                .setTitle(args != null ? "Ajouter au journal" : "Créer un aliment")
+                .setPositiveButton("Ajouter", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        addFood();
+                    }
+                })
+                .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
 
         return builder.create();
     }
 
     private void addFood() {
-        // Valider les entrées
-        String name = etName.getText().toString().trim();
-        if (name.isEmpty()) {
-            Toast.makeText(getContext(), "Veuillez entrer un nom", Toast.LENGTH_SHORT).show();
+        if (listener == null) {
             return;
         }
 
-        int calories;
-        float protein, carbs, fat;
+        // Récupérer et valider les données
+        String name = etName.getText().toString().trim();
+        String caloriesStr = etCalories.getText().toString().trim();
+        String proteinStr = etProtein.getText().toString().trim();
+        String carbsStr = etCarbs.getText().toString().trim();
+        String fatStr = etFat.getText().toString().trim();
+        String quantityStr = etQuantity.getText().toString().trim();
+        String mealType = spMealType.getSelectedItem().toString();
+
+        if (name.isEmpty() || caloriesStr.isEmpty() || proteinStr.isEmpty() ||
+                carbsStr.isEmpty() || fatStr.isEmpty() || quantityStr.isEmpty()) {
+            return; // Les champs ne sont pas tous remplis
+        }
 
         try {
-            calories = Integer.parseInt(etCalories.getText().toString().trim());
-            protein = Float.parseFloat(etProtein.getText().toString().trim());
-            carbs = Float.parseFloat(etCarbs.getText().toString().trim());
-            fat = Float.parseFloat(etFat.getText().toString().trim());
+            int calories = Integer.parseInt(caloriesStr);
+            float protein = Float.parseFloat(proteinStr);
+            float carbs = Float.parseFloat(carbsStr);
+            float fat = Float.parseFloat(fatStr);
+            float quantity = Float.parseFloat(quantityStr);
 
-            if (calories < 0 || protein < 0 || carbs < 0 || fat < 0) {
-                Toast.makeText(getContext(), "Les valeurs doivent être positives", Toast.LENGTH_SHORT).show();
-                return;
-            }
+            listener.onFoodAdded(name, calories, protein, carbs, fat, quantity, mealType);
         } catch (NumberFormatException e) {
-            Toast.makeText(getContext(), "Veuillez entrer des valeurs numériques valides", Toast.LENGTH_SHORT).show();
-            return;
+            // En cas d'erreur de conversion, on ignore simplement la demande
         }
-
-        // Appeler le listener
-        if (listener != null) {
-            listener.onAddFood(name, calories, protein, carbs, fat);
-        }
-
-        dismiss();
     }
 }
