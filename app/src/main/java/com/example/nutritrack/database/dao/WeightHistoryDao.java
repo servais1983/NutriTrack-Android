@@ -24,18 +24,15 @@ public interface WeightHistoryDao {
     @Delete
     void delete(WeightHistoryEntity weightHistory);
 
-    @Query("DELETE FROM weight_history")
-    void deleteAll();
-
     @Query("SELECT * FROM weight_history WHERE id = :id")
-    LiveData<WeightHistoryEntity> getWeightHistoryById(long id);
+    LiveData<WeightHistoryEntity> getWeightHistoryById(int id);
 
-    @Query("SELECT * FROM weight_history ORDER BY date DESC")
-    LiveData<List<WeightHistoryEntity>> getAllWeightHistory();
+    @Query("SELECT * FROM weight_history WHERE user_id = :userId ORDER BY date ASC")
+    LiveData<List<WeightHistoryEntity>> getWeightHistoryByUserId(int userId);
 
-    @Query("SELECT * FROM weight_history WHERE date >= :startDate AND date <= :endDate ORDER BY date DESC")
-    LiveData<List<WeightHistoryEntity>> getWeightHistoryByDateRange(Date startDate, Date endDate);
+    @Query("SELECT * FROM weight_history WHERE user_id = :userId AND date >= :startDate AND date <= :endDate ORDER BY date ASC")
+    LiveData<List<WeightHistoryEntity>> getWeightHistoryByUserIdAndDateRange(int userId, Date startDate, Date endDate);
 
-    @Query("SELECT * FROM weight_history ORDER BY date DESC LIMIT 1")
-    LiveData<WeightHistoryEntity> getLatestWeight();
+    @Query("SELECT * FROM weight_history WHERE user_id = :userId ORDER BY date DESC LIMIT 1")
+    LiveData<WeightHistoryEntity> getLatestWeightByUserId(int userId);
 }

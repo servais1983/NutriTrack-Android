@@ -2,33 +2,52 @@ package com.example.nutritrack.database.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "weight_history")
+@Entity(tableName = "weight_history",
+        foreignKeys = @ForeignKey(entity = UserEntity.class,
+                     parentColumns = "id",
+                     childColumns = "user_id",
+                     onDelete = ForeignKey.CASCADE))
 public class WeightHistoryEntity {
 
     @PrimaryKey(autoGenerate = true)
-    private long id;
+    private int id;
+
+    @ColumnInfo(name = "user_id")
+    private int userId;
 
     @ColumnInfo(name = "weight")
-    private float weight; // en kg
+    private float weight;
 
     @ColumnInfo(name = "date")
     private Date date;
 
-    public WeightHistoryEntity(float weight, Date date) {
+    // Constructeur
+    public WeightHistoryEntity(int userId, float weight, Date date) {
+        this.userId = userId;
         this.weight = weight;
         this.date = date;
     }
 
-    public long getId() {
+    // Getters and Setters
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public float getWeight() {

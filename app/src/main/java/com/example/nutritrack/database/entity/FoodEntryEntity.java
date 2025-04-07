@@ -2,57 +2,71 @@ package com.example.nutritrack.database.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity(tableName = "food_entries")
+@Entity(tableName = "food_entries",
+        foreignKeys = @ForeignKey(entity = UserEntity.class,
+                      parentColumns = "id",
+                      childColumns = "user_id",
+                      onDelete = ForeignKey.CASCADE))
 public class FoodEntryEntity {
 
     @PrimaryKey(autoGenerate = true)
-    private long id;
+    private int id;
+
+    @ColumnInfo(name = "user_id")
+    private int userId;
 
     @ColumnInfo(name = "name")
     private String name;
-
-    @ColumnInfo(name = "quantity")
-    private float quantity; // en grammes ou ml
 
     @ColumnInfo(name = "calories")
     private int calories;
 
     @ColumnInfo(name = "protein")
-    private float protein; // en grammes
+    private float protein;
 
     @ColumnInfo(name = "carbs")
-    private float carbs; // en grammes
+    private float carbs;
 
     @ColumnInfo(name = "fat")
-    private float fat; // en grammes
+    private float fat;
 
-    @ColumnInfo(name = "date_time")
-    private Date dateTime;
+    @ColumnInfo(name = "quantity")
+    private float quantity;
+
+    @ColumnInfo(name = "date")
+    private Date date;
 
     @ColumnInfo(name = "meal_type")
     private String mealType; // "breakfast", "lunch", "dinner", "snack"
 
-    public FoodEntryEntity(String name, float quantity, int calories, float protein, float carbs, float fat, Date dateTime, String mealType) {
-        this.name = name;
-        this.quantity = quantity;
-        this.calories = calories;
-        this.protein = protein;
-        this.carbs = carbs;
-        this.fat = fat;
-        this.dateTime = dateTime;
-        this.mealType = mealType;
+    @ColumnInfo(name = "barcode")
+    private String barcode;
+
+    // Constructeur
+    public FoodEntryEntity() {
+        // Constructeur vide requis par Room
     }
 
-    public long getId() {
+    // Getters and Setters
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -61,14 +75,6 @@ public class FoodEntryEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public float getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(float quantity) {
-        this.quantity = quantity;
     }
 
     public int getCalories() {
@@ -103,12 +109,20 @@ public class FoodEntryEntity {
         this.fat = fat;
     }
 
-    public Date getDateTime() {
-        return dateTime;
+    public float getQuantity() {
+        return quantity;
     }
 
-    public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
+    public void setQuantity(float quantity) {
+        this.quantity = quantity;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getMealType() {
@@ -117,5 +131,13 @@ public class FoodEntryEntity {
 
     public void setMealType(String mealType) {
         this.mealType = mealType;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 }
