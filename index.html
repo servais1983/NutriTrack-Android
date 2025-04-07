@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NutriTrack - Application Android de suivi nutritionnel</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>NutriTrack - Application de suivi nutritionnel</title>
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -14,238 +14,509 @@
             <div class="header-content">
                 <div class="logo">
                     <h1>NutriTrack</h1>
-                    <p class="tagline">Votre compagnon nutritionnel intelligent</p>
+                    <p class="tagline">Votre compagnon nutritionnel</p>
                 </div>
                 <nav>
                     <ul>
-                        <li><a href="#fonctionnalites">Fonctionnalités</a></li>
-                        <li><a href="#technologie">Technologie</a></li>
-                        <li><a href="#installation">Installation</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#" class="active" onclick="showTab('dashboard')">Tableau de bord</a></li>
+                        <li><a href="#" onclick="showTab('food')">Aliments</a></li>
+                        <li><a href="#" onclick="showTab('progress')">Progression</a></li>
+                        <li><a href="#" onclick="showTab('profile')">Profil</a></li>
                     </ul>
                 </nav>
             </div>
         </div>
     </header>
 
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h2>Calculez, scannez, suivez. <br>Tout en un.</h2>
-                    <p>Application Android complète pour calculer vos besoins caloriques personnalisés, scanner les étiquettes nutritionnelles et suivre l'évolution de votre condition physique.</p>
-                    <div class="cta-buttons">
-                        <a href="https://github.com/servais1983/NutriTrack-Android" class="btn btn-primary"><i class="fab fa-github"></i> Voir sur GitHub</a>
-                        <a href="#" class="btn btn-secondary"><i class="fas fa-download"></i> Télécharger l'APK</a>
-                    </div>
+    <main>
+        <!-- TABLEAU DE BORD -->
+        <section id="dashboard" class="tab-content active">
+            <div class="container">
+                <h2>Tableau de bord</h2>
+                <div class="date-selector">
+                    <button onclick="previousDay()"><i class="fas fa-chevron-left"></i></button>
+                    <h3 id="currentDate">Aujourd'hui</h3>
+                    <button onclick="nextDay()"><i class="fas fa-chevron-right"></i></button>
                 </div>
-                <div class="hero-image">
-                    <img src="placeholder-app.png" alt="NutriTrack App Screenshot" class="phone-mockup">
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section id="fonctionnalites" class="features">
-        <div class="container">
-            <h2 class="section-title">Fonctionnalités principales</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-user-circle"></i>
+                <div class="nutrition-summary">
+                    <div class="summary-item">
+                        <div class="nutrient-progress" data-progress="0">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" class="progress-bg" />
+                                <circle cx="50" cy="50" r="45" class="progress-ring" id="caloriesRing" />
+                            </svg>
+                            <div class="progress-text">
+                                <span id="caloriesConsumed">0</span>/<span id="caloriesGoal">2000</span>
+                            </div>
+                        </div>
+                        <p>Calories</p>
                     </div>
-                    <h3>Profil personnalisé</h3>
-                    <ul>
-                        <li>Configuration détaillée du profil (âge, sexe, poids, taille, niveau d'activité)</li>
-                        <li>Calcul automatique des besoins caloriques selon la formule de Mifflin-St Jeor</li>
-                        <li>Recommandations personnalisées de macronutriments selon l'objectif choisi</li>
-                    </ul>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-utensils"></i>
+                    <div class="summary-item">
+                        <div class="nutrient-progress" data-progress="0">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" class="progress-bg" />
+                                <circle cx="50" cy="50" r="45" class="progress-ring protein" id="proteinRing" />
+                            </svg>
+                            <div class="progress-text">
+                                <span id="proteinConsumed">0</span>/<span id="proteinGoal">150</span>
+                            </div>
+                        </div>
+                        <p>Protéines (g)</p>
                     </div>
-                    <h3>Suivi nutritionnel</h3>
-                    <ul>
-                        <li>Tableau de bord avec statistiques nutritionnelles en temps réel</li>
-                        <li>Tracking des calories et macronutriments quotidiens</li>
-                        <li>Organisation par type de repas</li>
-                        <li>Historique des aliments consommés</li>
-                    </ul>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-barcode"></i>
+                    <div class="summary-item">
+                        <div class="nutrient-progress" data-progress="0">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" class="progress-bg" />
+                                <circle cx="50" cy="50" r="45" class="progress-ring carbs" id="carbsRing" />
+                            </svg>
+                            <div class="progress-text">
+                                <span id="carbsConsumed">0</span>/<span id="carbsGoal">250</span>
+                            </div>
+                        </div>
+                        <p>Glucides (g)</p>
                     </div>
-                    <h3>Scan intelligent</h3>
-                    <ul>
-                        <li>Scan de codes-barres pour identification rapide des produits</li>
-                        <li>Reconnaissance optique des étiquettes nutritionnelles</li>
-                        <li>Extraction automatique des valeurs nutritionnelles</li>
-                    </ul>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
+                    <div class="summary-item">
+                        <div class="nutrient-progress" data-progress="0">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" class="progress-bg" />
+                                <circle cx="50" cy="50" r="45" class="progress-ring fat" id="fatRing" />
+                            </svg>
+                            <div class="progress-text">
+                                <span id="fatConsumed">0</span>/<span id="fatGoal">65</span>
+                            </div>
+                        </div>
+                        <p>Lipides (g)</p>
                     </div>
-                    <h3>Suivi de progression</h3>
-                    <ul>
-                        <li>Graphique d'évolution du poids</li>
-                        <li>Suivi des tendances sur la durée</li>
-                        <li>Enregistrement d'historique</li>
-                    </ul>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <section id="technologie" class="technology">
-        <div class="container">
-            <h2 class="section-title">Technologies utilisées</h2>
-            <div class="tech-content">
-                <div class="tech-list">
-                    <div class="tech-item">
-                        <h3><i class="fas fa-layer-group"></i> Architecture</h3>
-                        <p>MVVM (Model-View-ViewModel) avec LiveData et Repository</p>
+                <div class="meals-container">
+                    <div class="meal-category" id="breakfast">
+                        <div class="meal-header">
+                            <h3><i class="fas fa-coffee"></i> Petit-déjeuner</h3>
+                            <button class="add-food-btn" onclick="openAddFoodModal('breakfast')"><i class="fas fa-plus"></i> Ajouter</button>
+                        </div>
+                        <div class="meal-items" id="breakfastItems">
+                            <!-- Les aliments du petit-déjeuner seront ajoutés ici dynamiquement -->
+                            <p class="empty-meal">Aucun aliment ajouté</p>
+                        </div>
                     </div>
-                    <div class="tech-item">
-                        <h3><i class="fas fa-database"></i> Stockage local</h3>
-                        <p>Room Database pour une persistance des données optimisée</p>
-                    </div>
-                    <div class="tech-item">
-                        <h3><i class="fas fa-palette"></i> Interface utilisateur</h3>
-                        <p>Material Design Components pour une expérience moderne</p>
-                    </div>
-                    <div class="tech-item">
-                        <h3><i class="fas fa-camera"></i> Capture d'image</h3>
-                        <p>CameraX pour l'intégration de la caméra</p>
-                    </div>
-                    <div class="tech-item">
-                        <h3><i class="fas fa-brain"></i> Vision par ordinateur</h3>
-                        <p>ML Kit pour la reconnaissance de texte et codes-barres</p>
-                    </div>
-                    <div class="tech-item">
-                        <h3><i class="fas fa-chart-pie"></i> Visualisation</h3>
-                        <p>MPAndroidChart pour les graphiques interactifs</p>
-                    </div>
-                </div>
-                <div class="tech-image">
-                    <img src="placeholder-tech.png" alt="Architecture Technology Diagram" class="tech-diagram">
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section id="installation" class="installation">
-        <div class="container">
-            <h2 class="section-title">Installation</h2>
-            <div class="installation-steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3>Clonez le dépôt</h3>
-                        <div class="code-block">
-                            <code>git clone https://github.com/servais1983/NutriTrack-Android.git</code>
-                            <button class="copy-btn" onclick="copyToClipboard(this)">
-                                <i class="fas fa-copy"></i>
-                            </button>
+                    <div class="meal-category" id="lunch">
+                        <div class="meal-header">
+                            <h3><i class="fas fa-utensils"></i> Déjeuner</h3>
+                            <button class="add-food-btn" onclick="openAddFoodModal('lunch')"><i class="fas fa-plus"></i> Ajouter</button>
+                        </div>
+                        <div class="meal-items" id="lunchItems">
+                            <!-- Les aliments du déjeuner seront ajoutés ici dynamiquement -->
+                            <p class="empty-meal">Aucun aliment ajouté</p>
+                        </div>
+                    </div>
+
+                    <div class="meal-category" id="dinner">
+                        <div class="meal-header">
+                            <h3><i class="fas fa-moon"></i> Dîner</h3>
+                            <button class="add-food-btn" onclick="openAddFoodModal('dinner')"><i class="fas fa-plus"></i> Ajouter</button>
+                        </div>
+                        <div class="meal-items" id="dinnerItems">
+                            <!-- Les aliments du dîner seront ajoutés ici dynamiquement -->
+                            <p class="empty-meal">Aucun aliment ajouté</p>
+                        </div>
+                    </div>
+
+                    <div class="meal-category" id="snacks">
+                        <div class="meal-header">
+                            <h3><i class="fas fa-cookie"></i> Collations</h3>
+                            <button class="add-food-btn" onclick="openAddFoodModal('snacks')"><i class="fas fa-plus"></i> Ajouter</button>
+                        </div>
+                        <div class="meal-items" id="snacksItems">
+                            <!-- Les aliments des collations seront ajoutés ici dynamiquement -->
+                            <p class="empty-meal">Aucun aliment ajouté</p>
                         </div>
                     </div>
                 </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3>Ouvrez le projet dans Android Studio</h3>
-                        <p>Lancez Android Studio et sélectionnez "Open an existing project"</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3>Synchronisez avec Gradle</h3>
-                        <p>Laissez Android Studio synchroniser le projet avec les fichiers Gradle</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h3>Exécutez sur un appareil ou émulateur</h3>
-                        <p>API 21 (Android 5.0 Lollipop) minimum recommandé</p>
-                    </div>
-                </div>
             </div>
-            <div class="prerequisites">
-                <h3>Prérequis</h3>
-                <ul>
-                    <li><i class="fas fa-check-circle"></i> Android Studio 4.2 ou supérieur</li>
-                    <li><i class="fas fa-check-circle"></i> SDK Android 30 ou supérieur</li>
-                    <li><i class="fas fa-check-circle"></i> Gradle 7.0 ou supérieur</li>
-                </ul>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="roadmap">
-        <div class="container">
-            <h2 class="section-title">Développements futurs</h2>
-            <div class="roadmap-items">
-                <div class="roadmap-item">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <p>Synchronisation avec des bases de données nutritionnelles en ligne</p>
+        <!-- ALIMENTS -->
+        <section id="food" class="tab-content">
+            <div class="container">
+                <h2>Aliments</h2>
+                <div class="search-bar">
+                    <input type="text" id="foodSearch" placeholder="Rechercher un aliment...">
+                    <button class="scan-btn" onclick="openScanModal()"><i class="fas fa-barcode"></i> Scanner</button>
+                    <button class="add-btn" onclick="openAddCustomFoodModal()"><i class="fas fa-plus"></i> Ajouter</button>
                 </div>
-                <div class="roadmap-item">
-                    <i class="fas fa-camera-retro"></i>
-                    <p>Reconnaissance d'aliments par photo</p>
-                </div>
-                <div class="roadmap-item">
-                    <i class="fas fa-lightbulb"></i>
-                    <p>Suggestions personnalisées de repas</p>
-                </div>
-                <div class="roadmap-item">
-                    <i class="fas fa-heartbeat"></i>
-                    <p>Intégration avec Google Fit et autres wearables</p>
-                </div>
-                <div class="roadmap-item">
-                    <i class="fas fa-wifi-slash"></i>
-                    <p>Mode hors-ligne amélioré</p>
-                </div>
-                <div class="roadmap-item">
-                    <i class="fas fa-language"></i>
-                    <p>Support multilingue complet</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section id="contact" class="cta">
-        <div class="container">
-            <h2>Prêt à améliorer votre nutrition?</h2>
-            <p>Téléchargez NutriTrack dès maintenant ou contribuez au projet sur GitHub</p>
-            <div class="cta-buttons">
-                <a href="https://github.com/servais1983/NutriTrack-Android" class="btn btn-primary"><i class="fab fa-github"></i> Contribuer sur GitHub</a>
-                <a href="#" class="btn btn-secondary"><i class="fas fa-download"></i> Télécharger l'APK</a>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">Tous</button>
+                    <button class="filter-btn" data-filter="favorites">Favoris</button>
+                    <button class="filter-btn" data-filter="recent">Récents</button>
+                    <button class="filter-btn" data-filter="custom">Personnalisés</button>
+                </div>
+
+                <div class="food-list" id="foodList">
+                    <!-- Les aliments seront ajoutés ici dynamiquement -->
+                </div>
+            </div>
+        </section>
+
+        <!-- PROGRESSION -->
+        <section id="progress" class="tab-content">
+            <div class="container">
+                <h2>Progression</h2>
+                <div class="progress-tabs">
+                    <button class="progress-tab-btn active" data-tab="weight">Poids</button>
+                    <button class="progress-tab-btn" data-tab="nutrition">Nutrition</button>
+                </div>
+
+                <div class="progress-content active" id="weightProgress">
+                    <div class="weight-summary">
+                        <div class="weight-item">
+                            <h4>Poids actuel</h4>
+                            <p id="currentWeight">75.0 kg</p>
+                        </div>
+                        <div class="weight-item">
+                            <h4>Poids initial</h4>
+                            <p id="initialWeight">80.0 kg</p>
+                        </div>
+                        <div class="weight-item">
+                            <h4>Variation</h4>
+                            <p id="weightChange">-5.0 kg</p>
+                        </div>
+                        <div class="weight-item">
+                            <h4>IMC</h4>
+                            <p id="bmiValue">24.5</p>
+                        </div>
+                    </div>
+
+                    <div class="weight-chart-container">
+                        <canvas id="weightChart"></canvas>
+                    </div>
+
+                    <div class="add-weight-container">
+                        <button class="add-weight-btn" onclick="openAddWeightModal()"><i class="fas fa-plus"></i> Ajouter une entrée de poids</button>
+                    </div>
+                </div>
+
+                <div class="progress-content" id="nutritionProgress">
+                    <div class="period-selector">
+                        <button class="period-btn active" data-period="week">Semaine</button>
+                        <button class="period-btn" data-period="month">Mois</button>
+                        <button class="period-btn" data-period="year">Année</button>
+                    </div>
+
+                    <div class="nutrition-chart-container">
+                        <canvas id="caloriesChart"></canvas>
+                    </div>
+
+                    <div class="nutrient-charts">
+                        <div class="chart-container">
+                            <h4>Protéines (g)</h4>
+                            <canvas id="proteinChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>Glucides (g)</h4>
+                            <canvas id="carbsChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>Lipides (g)</h4>
+                            <canvas id="fatChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROFIL -->
+        <section id="profile" class="tab-content">
+            <div class="container">
+                <h2>Profil</h2>
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 id="profileName">Utilisateur</h3>
+                    </div>
+
+                    <form id="profileForm">
+                        <div class="form-section">
+                            <h4>Informations personnelles</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profileNameInput">Nom</label>
+                                    <input type="text" id="profileNameInput" placeholder="Votre nom">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileEmail">Email</label>
+                                    <input type="email" id="profileEmail" placeholder="Votre email">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profileBirthdate">Date de naissance</label>
+                                    <input type="date" id="profileBirthdate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileGender">Genre</label>
+                                    <select id="profileGender">
+                                        <option value="">Sélectionner</option>
+                                        <option value="homme">Homme</option>
+                                        <option value="femme">Femme</option>
+                                        <option value="autre">Autre</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>Mesures corporelles</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profileHeight">Taille (cm)</label>
+                                    <input type="number" id="profileHeight" placeholder="Taille en cm">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileWeight">Poids (kg)</label>
+                                    <input type="number" id="profileWeight" placeholder="Poids en kg" step="0.1">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profileActivity">Niveau d'activité</label>
+                                    <select id="profileActivity">
+                                        <option value="1.2">Sédentaire (peu ou pas d'exercice)</option>
+                                        <option value="1.375">Légèrement actif (exercice léger 1-3 jours/semaine)</option>
+                                        <option value="1.55">Modérément actif (exercice modéré 3-5 jours/semaine)</option>
+                                        <option value="1.725">Très actif (exercice intense 6-7 jours/semaine)</option>
+                                        <option value="1.9">Extrêmement actif (exercice très intense, travail physique)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileGoal">Objectif</label>
+                                    <select id="profileGoal">
+                                        <option value="loss">Perte de poids</option>
+                                        <option value="maintain">Maintien du poids</option>
+                                        <option value="gain">Prise de poids</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>Objectifs nutritionnels</h4>
+                            <p class="macro-info">Vos besoins caloriques estimés: <span id="calorieNeeds">2000</span> kcal par jour</p>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profileCalories">Calories (kcal)</label>
+                                    <input type="number" id="profileCalories">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileProtein">Protéines (g)</label>
+                                    <input type="number" id="profileProtein">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profileCarbs">Glucides (g)</label>
+                                    <input type="number" id="profileCarbs">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileFat">Lipides (g)</label>
+                                    <input type="number" id="profileFat">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="save-btn">Enregistrer les modifications</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODALS -->
+    <!-- Modal pour ajouter un aliment -->
+    <div class="modal" id="addFoodModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ajouter un aliment</h3>
+                <button class="close-btn" onclick="closeModal('addFoodModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="search-bar">
+                    <input type="text" id="modalFoodSearch" placeholder="Rechercher un aliment...">
+                </div>
+                <div class="food-list" id="modalFoodList">
+                    <!-- Les aliments seront ajoutés ici dynamiquement -->
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <!-- Modal pour ajouter un aliment personnalisé -->
+    <div class="modal" id="addCustomFoodModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ajouter un aliment personnalisé</h3>
+                <button class="close-btn" onclick="closeModal('addCustomFoodModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="customFoodForm">
+                    <div class="form-group">
+                        <label for="customFoodName">Nom de l'aliment</label>
+                        <input type="text" id="customFoodName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customFoodServing">Taille de la portion (g)</label>
+                        <input type="number" id="customFoodServing" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customFoodCalories">Calories (kcal)</label>
+                        <input type="number" id="customFoodCalories" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customFoodProtein">Protéines (g)</label>
+                            <input type="number" id="customFoodProtein" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customFoodCarbs">Glucides (g)</label>
+                            <input type="number" id="customFoodCarbs" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customFoodFat">Lipides (g)</label>
+                            <input type="number" id="customFoodFat" required>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="save-btn">Ajouter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour scanner un code-barres -->
+    <div class="modal" id="scanModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Scanner un code-barres</h3>
+                <button class="close-btn" onclick="closeModal('scanModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="scan-container">
+                    <div class="scan-message">
+                        <p>Nous utilisons la caméra de votre appareil pour scanner les codes-barres. Veuillez autoriser l'accès à la caméra.</p>
+                    </div>
+                    <div class="scanner-placeholder">
+                        <div class="scanner-animation"></div>
+                        <p>Placez le code-barres à l'intérieur du cadre</p>
+                    </div>
+                    <video id="scanner" class="scanner-video"></video>
+                    <div class="scan-overlay">
+                        <div class="scan-region"></div>
+                    </div>
+                    <div class="scan-buttons">
+                        <button class="scan-btn" onclick="startScanner()"><i class="fas fa-camera"></i> Démarrer</button>
+                        <button class="scan-btn" onclick="stopScanner()"><i class="fas fa-stop"></i> Arrêter</button>
+                    </div>
+                </div>
+                <div class="scan-result" id="scanResult" style="display: none;">
+                    <h4>Résultat du scan</h4>
+                    <div id="scannedFoodInfo">
+                        <!-- Les informations sur l'aliment scanné seront ajoutées ici -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour ajouter une entrée de poids -->
+    <div class="modal" id="addWeightModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ajouter une entrée de poids</h3>
+                <button class="close-btn" onclick="closeModal('addWeightModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="weightForm">
+                    <div class="form-group">
+                        <label for="weightDate">Date</label>
+                        <input type="date" id="weightDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weightValue">Poids (kg)</label>
+                        <input type="number" id="weightValue" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weightNotes">Notes (optionnel)</label>
+                        <textarea id="weightNotes"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="save-btn">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour ajouter un aliment au journal -->
+    <div class="modal" id="addFoodToLogModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ajouter au journal</h3>
+                <button class="close-btn" onclick="closeModal('addFoodToLogModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div id="selectedFoodInfo" class="selected-food-info">
+                    <!-- Les informations sur l'aliment sélectionné seront ajoutées ici -->
+                </div>
+                <form id="addFoodToLogForm">
+                    <div class="form-group">
+                        <label for="foodQuantity">Quantité (g)</label>
+                        <input type="number" id="foodQuantity" value="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodMealType">Repas</label>
+                        <select id="foodMealType" required>
+                            <option value="breakfast">Petit-déjeuner</option>
+                            <option value="lunch">Déjeuner</option>
+                            <option value="dinner">Dîner</option>
+                            <option value="snacks">Collation</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="save-btn">Ajouter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <div class="container">
-            <div class="footer-content">
-                <div class="copyright">
-                    <p>&copy; 2025 NutriTrack. Projet sous licence MIT.</p>
-                </div>
-                <div class="footer-links">
-                    <a href="https://github.com/servais1983/NutriTrack-Android"><i class="fab fa-github"></i></a>
-                    <a href="#"><i class="fas fa-envelope"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                </div>
-            </div>
+            <p>&copy; 2025 NutriTrack - Tous droits réservés</p>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- Bibliothèques externes -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+
+    <!-- Scripts de l'application -->
+    <script src="js/app.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/food.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/database.js"></script>
 </body>
 </html>
