@@ -136,41 +136,35 @@ public class FoodFragment extends Fragment implements FoodAdapter.OnFoodItemClic
         items.add(new FoodItem("Yaourt nature (150g)", 86, 5, 5, 3.5f));
         items.add(new FoodItem("Pâtes (100g cuites)", 131, 5, 25, 1.1f));
         items.add(new FoodItem("Thon en conserve (100g)", 116, 25, 0, 1));
-        items.add(new FoodItem("Fromage cheddar (30g)", 113, 7, 0.4f, 9.3f));
-        items.add(new FoodItem("Banane (moyenne)", 105, 1.3f, 27, 0.4f));
-        items.add(new FoodItem("Amandes (30g)", 173, 6, 6, 15));
-        items.add(new FoodItem("Chocolat noir (30g)", 170, 2, 13, 12));
-        items.add(new FoodItem("Quinoa cuit (100g)", 120, 4.4f, 21, 1.9f));
         items.add(new FoodItem("Lentilles cuites (100g)", 116, 9, 20, 0.4f));
-        items.add(new FoodItem("Huile d'olive (1 c.à.s)", 119, 0, 0, 14));
-        items.add(new FoodItem("Patate douce (100g)", 86, 1.6f, 20, 0.1f));
+        items.add(new FoodItem("Fromage cheddar (30g)", 110, 7, 0.4f, 9));
+        items.add(new FoodItem("Banane (moyenne)", 105, 1.3f, 27, 0.4f));
+        items.add(new FoodItem("Amandes (30g)", 180, 6, 6, 15));
+        items.add(new FoodItem("Chocolat noir 70% (25g)", 140, 2, 12, 10));
+        items.add(new FoodItem("Pizza margherita (part)", 250, 10, 30, 10));
+        items.add(new FoodItem("Hamburger (standard)", 350, 15, 35, 15));
+        items.add(new FoodItem("Salade César (portion)", 200, 8, 10, 16));
 
         return items;
     }
 
     private void filterFoodItems(String query) {
         filteredFoodItems.clear();
-        
+        query = query.toLowerCase().trim();
+
         if (query.isEmpty()) {
             // Si la requête est vide, afficher tous les aliments
             filteredFoodItems.addAll(foodItems);
         } else {
             // Filtrer les aliments par nom
-            String lowerCaseQuery = query.toLowerCase();
-            for (FoodItem food : foodItems) {
-                if (food.getName().toLowerCase().contains(lowerCaseQuery)) {
-                    filteredFoodItems.add(food);
+            for (FoodItem item : foodItems) {
+                if (item.getName().toLowerCase().contains(query)) {
+                    filteredFoodItems.add(item);
                 }
             }
         }
-        
-        // Mettre à jour le RecyclerView
+
         foodAdapter.notifyDataSetChanged();
-        
-        // Afficher un message si aucun aliment n'est trouvé
-        if (filteredFoodItems.isEmpty()) {
-            Toast.makeText(getContext(), "Aucun aliment trouvé. Essayez une autre recherche ou ajoutez un aliment personnalisé.", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void showAddFoodDialog() {
@@ -181,45 +175,40 @@ public class FoodFragment extends Fragment implements FoodAdapter.OnFoodItemClic
 
     @Override
     public void onFoodItemClick(FoodItem foodItem) {
-        // Lorsqu'un aliment est sélectionné, ajouter une entrée dans le journal alimentaire
-        saveFoodEntry(foodItem, 100.0f); // 100g par défaut
+        // Afficher un dialogue pour ajouter cet aliment au journal
+        AddFoodDialog dialog = new AddFoodDialog();
+        Bundle args = new Bundle();
+        args.putString("name", foodItem.getName());
+        args.putInt("calories", foodItem.getCalories());
+        args.putFloat("protein", foodItem.getProtein());
+        args.putFloat("carbs", foodItem.getCarbs());
+        args.putFloat("fat", foodItem.getFat());
+        dialog.setArguments(args);
+        dialog.setListener(this);
+        dialog.show(getChildFragmentManager(), "AddFoodDialog");
     }
 
     @Override
-    public void onAddFood(String name, int calories, float protein, float carbs, float fat) {
-        // Créer un nouvel aliment personnalisé
-        FoodItem newFood = new FoodItem(name, calories, protein, carbs, fat);
-        
-        // Ajouter à la liste d'aliments
-        foodItems.add(newFood);
-        filteredFoodItems.add(newFood);
-        foodAdapter.notifyDataSetChanged();
-        
-        // Ajouter automatiquement au journal alimentaire
-        saveFoodEntry(newFood, 100.0f); // 100g par défaut
-    }
+    public void onFoodAdded(String name, int calories, float protein, float carbs, float fat, float quantity, String mealType) {
+        // Créer une nouvelle entrée alimentaire
+        final FoodEntryEntity foodEntry = new FoodEntryEntity();
+        foodEntry.setUserId(userId);
+        foodEntry.setName(name);
+        foodEntry.setCalories((int) (calories * quantity / 100));
+        foodEntry.setProtein(protein * quantity / 100);
+        foodEntry.setCarbs(carbs * quantity / 100);
+        foodEntry.setFat(fat * quantity / 100);
+        foodEntry.setQuantity(quantity);
+        foodEntry.setDate(new Date());
+        foodEntry.setMealType(mealType);
 
-    private void saveFoodEntry(FoodItem food, float quantity) {
-        // Ajuster les valeurs nutritionnelles en fonction de la quantité
-        float quantityRatio = quantity / 100.0f; // Base de calcul pour 100g
-        
-        final FoodEntryEntity entry = new FoodEntryEntity();
-        entry.setUserId(userId);
-        entry.setName(food.getName());
-        entry.setCalories(Math.round(food.getCalories() * quantityRatio));
-        entry.setProtein(food.getProtein() * quantityRatio);
-        entry.setCarbs(food.getCarbs() * quantityRatio);
-        entry.setFat(food.getFat() * quantityRatio);
-        entry.setQuantity(quantity);
-        entry.setDate(new Date()); // Date actuelle
-        entry.setMealType("lunch"); // Par défaut, à modifier selon le contexte
-        
+        // Sauvegarder l'entrée dans la base de données
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                // Sauvegarder dans la base de données
-                long result = AppDatabase.getInstance(getContext()).foodEntryDao().insert(entry);
-                
+                final long result = AppDatabase.getInstance(getContext())
+                        .foodEntryDao().insert(foodEntry);
+
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
